@@ -1,0 +1,141 @@
+-- ============================================================
+-- 00_setup_raw.sql
+-- Creates: DB, RAW schema, file format, stage, and RAW tables
+-- Safe to re-run
+-- ============================================================
+
+USE ROLE ACCOUNTADMIN;
+
+-- USE WAREHOUSE COMPUTE_WH;
+
+CREATE DATABASE IF NOT EXISTS ECOM_DB;
+CREATE SCHEMA IF NOT EXISTS ECOM_DB.RAW;
+
+USE DATABASE ECOM_DB;
+USE SCHEMA RAW;
+
+-- ------------------------------------------------------------
+-- File format 
+-- ------------------------------------------------------------
+CREATE OR REPLACE FILE FORMAT FF_OLIST_CSV
+  TYPE = CSV
+  FIELD_DELIMITER = ','
+  RECORD_DELIMITER = '\n'
+  SKIP_HEADER = 1
+  FIELD_OPTIONALLY_ENCLOSED_BY = '"'
+  TRIM_SPACE = TRUE
+  EMPTY_FIELD_AS_NULL = TRUE
+  NULL_IF = ('', 'NULL', 'null')
+  COMPRESSION = AUTO;
+
+-- ------------------------------------------------------------
+-- Stage (UI uploads land here; keep DIRECTORY enabled)
+-- ------------------------------------------------------------
+CREATE OR REPLACE STAGE STG_OLIST
+  DIRECTORY = (ENABLE = TRUE)
+  FILE_FORMAT = FF_OLIST_CSV;
+
+-- ------------------------------------------------------------
+-- RAW tables
+-- ------------------------------------------------------------
+
+CREATE OR REPLACE TABLE ORDERS_RAW (
+  ORDER_ID                      STRING,
+  CUSTOMER_ID                   STRING,
+  ORDER_STATUS                  STRING,
+  ORDER_PURCHASE_TIMESTAMP      TIMESTAMP_NTZ,
+  ORDER_APPROVED_AT             TIMESTAMP_NTZ,
+  ORDER_DELIVERED_CARRIER_DATE  TIMESTAMP_NTZ,
+  ORDER_DELIVERED_CUSTOMER_DATE TIMESTAMP_NTZ,
+  ORDER_ESTIMATED_DELIVERY_DATE TIMESTAMP_NTZ,
+  SOURCE_FILE                   STRING,
+  LOADED_AT                     TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE ORDER_ITEMS_RAW (
+  ORDER_ID            STRING,
+  ORDER_ITEM_ID       NUMBER(38,0),
+  PRODUCT_ID          STRING,
+  SELLER_ID           STRING,
+  SHIPPING_LIMIT_DATE TIMESTAMP_NTZ,
+  PRICE               NUMBER(38,2),
+  FREIGHT_VALUE       NUMBER(38,2),
+  SOURCE_FILE         STRING,
+  LOADED_AT           TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE PAYMENTS_RAW (
+  ORDER_ID              STRING,
+  PAYMENT_SEQUENTIAL    NUMBER(38,0),
+  PAYMENT_TYPE          STRING,
+  PAYMENT_INSTALLMENTS  NUMBER(38,0),
+  PAYMENT_VALUE         NUMBER(38,2),
+  SOURCE_FILE           STRING,
+  LOADED_AT             TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE REVIEWS_RAW (
+  REVIEW_ID              STRING,
+  ORDER_ID               STRING,
+  REVIEW_SCORE           NUMBER(38,0),
+  REVIEW_COMMENT_TITLE   STRING,
+  REVIEW_COMMENT_MESSAGE STRING,
+  REVIEW_CREATION_DATE   TIMESTAMP_NTZ,
+  REVIEW_ANSWER_TIMESTAMP TIMESTAMP_NTZ,
+  SOURCE_FILE            STRING,
+  LOADED_AT              TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE CUSTOMERS_RAW (
+  CUSTOMER_ID            STRING,
+  CUSTOMER_UNIQUE_ID     STRING,
+  CUSTOMER_ZIP_CODE_PREFIX STRING,
+  CUSTOMER_CITY          STRING,
+  CUSTOMER_STATE         STRING,
+  SOURCE_FILE            STRING,
+  LOADED_AT              TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE SELLERS_RAW (
+  SELLER_ID              STRING,
+  SELLER_ZIP_CODE_PREFIX STRING,
+  SELLER_CITY            STRING,
+  SELLER_STATE           STRING,
+  SOURCE_FILE            STRING,
+  LOADED_AT              TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE PRODUCTS_RAW (
+  PRODUCT_ID                 STRING,
+  PRODUCT_CATEGORY_NAME      STRING,
+  PRODUCT_NAME_LENGHT        NUMBER(38,0),
+  PRODUCT_DESCRIPTION_LENGHT NUMBER(38,0),
+  PRODUCT_PHOTOS_QTY         NUMBER(38,0),
+  PRODUCT_WEIGHT_G           NUMBER(38,0),
+  PRODUCT_LENGTH_CM          NUMBER(38,0),
+  PRODUCT_HEIGHT_CM          NUMBER(38,0),
+  PRODUCT_WIDTH_CM           NUMBER(38,0),
+  SOURCE_FILE                STRING,
+  LOADED_AT                  TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE GEOLOCATION_RAW (
+  GEOLOCATION_ZIP_CODE_PREFIX STRING,
+  GEOLOCATION_LAT             FLOAT,
+  GEOLOCATION_LNG             FLOAT,
+  GEOLOCATION_CITY            STRING,
+  GEOLOCATION_STATE           STRING,
+  SOURCE_FILE                 STRING,
+  LOADED_AT                   TIMESTAMP_NTZ
+);
+
+CREATE OR REPLACE TABLE CATEGORY_TRANSLATION_RAW (
+  PRODUCT_CATEGORY_NAME         STRING,
+  PRODUCT_CATEGORY_NAME_ENGLISH STRING,
+  SOURCE_FILE                   STRING,
+  LOADED_AT                     TIMESTAMP_NTZ
+);
+
+-- Quick sanity
+SHOW FILE FORMATS LIKE 'FF_OLIST_CSV';
+DESC STAGE STG_OLIST;
