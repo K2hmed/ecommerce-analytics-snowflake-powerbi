@@ -70,10 +70,7 @@ This separation ensures:
 
 **Purpose:** Preserve source data exactly as delivered.
 
-📸 *Screenshot Placeholder — RAW Load Validation*
-```markdown
 ![Snowflake RAW Validation](screenshots/snowflake_raw_validation.png)
-````
 
 ---
 
@@ -91,11 +88,7 @@ Key work done:
 
 This layer guarantees that **Power BI never performs data cleaning**.
 
-📸 *Screenshot Placeholder — STG Transformations*
-
-```markdown
 ![Snowflake STG Transformations](screenshots/snowflake_stg_transformations.png)
-```
 
 ---
 
@@ -128,11 +121,7 @@ All relationships are:
 * Directional (dimension → fact)
 * BI-friendly and scalable
 
-📸 *Screenshot Placeholder — Analytics Schema*
-
-```markdown
 ![Snowflake Analytics Schema](screenshots/snowflake_analytics_schema.png)
-```
 
 ---
 
@@ -146,11 +135,7 @@ Before connecting Power BI:
 
 This ensured **trustworthy KPIs** downstream.
 
-📸 *Screenshot Placeholder — KPI Validation*
-
-```markdown
 ![Snowflake KPI Validation](screenshots/snowflake_kpi_validation.png)
-```
 
 ---
 
@@ -206,11 +191,7 @@ All KPIs were:
 * Cancellations represent a very small share of total orders
 * Seasonal fluctuations are clearly visible
 
-📸 *Screenshot Placeholder*
-
-```markdown
 ![Executive Overview](screenshots/pbi_executive_overview.png)
-```
 
 ---
 
@@ -228,11 +209,7 @@ All KPIs were:
 * Late deliveries have a long-tail distribution
 * Certain states consistently show higher late delivery counts
 
-📸 *Screenshot Placeholder*
-
-```markdown
 ![Delivery Performance](screenshots/pbi_delivery_performance.png)
-```
 
 ---
 
@@ -250,11 +227,7 @@ All KPIs were:
 * Revenue concentration exists across a small subset of categories
 * Product-level revenue dispersion is significant
 
-📸 *Screenshot Placeholder*
-
-```markdown
 ![Product & Category](screenshots/pbi_product_category.png)
-```
 
 ---
 
@@ -272,11 +245,7 @@ All KPIs were:
 * Some states generate fewer orders but higher revenue per customer
 * Geographic segmentation reveals expansion opportunities
 
-📸 *Screenshot Placeholder*
-
-```markdown
 ![Customer Geography](screenshots/pbi_customer_geography.png)
-```
 
 ---
 
